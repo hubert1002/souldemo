@@ -37,6 +37,7 @@ flutter build macos
 - `lib/screens/root_shell.dart` 是主框架：四个 Tab 放在 `IndexedStack` 中，由 `state.tabIndex` 切换。
 - 数据模型在 `lib/models.dart`；所有模拟内容在 `lib/data.dart`；共享视觉常量在 `lib/theme.dart`；通用界面组件在 `lib/widgets/core.dart`。
 - 当前 `AppState` 直接从 `data.dart` 初始化 mock 数据。后续接入后端时，网络请求与数据访问应集中在独立的数据层（如 repository / api client），不要把 HTTP 调用写进页面或 `AppState` 内部；页面通过状态层获取数据，以便用真实实现替换 mock。
+- 网络与数据访问的基础设施在 `lib/services/`：`ApiClient` 封装 Dio（超时、Token、异常转换），`FeedRepository` 提供 mock / 远端两种实现，`Services` 是唯一入口。默认 `ApiConfig.useMock` 为 `true`；接后端时用 `--dart-define=USE_MOCK=false --dart-define=API_BASE_URL=...` 切换。新增接口时在 `lib/services/` 增加 repository，不要在页面或 `AppState` 里直接调 Dio。
 
 ## 约定与注意事项
 

@@ -15,6 +15,14 @@ flutter run              # iOS / Android 真机或模拟器
 
 桌面 / 宽屏会显示手机外框和拟真状态栏；窄屏直接全屏并使用系统安全区。
 
+默认使用本地 mock 数据（`lib/data.dart`），不会发起真实网络请求。接入后端时：
+
+```bash
+flutter run -d macos \
+  --dart-define=USE_MOCK=false \
+  --dart-define=API_BASE_URL=https://api.example.com
+```
+
 ## 验证
 
 ```bash
@@ -46,6 +54,12 @@ lib/
   data.dart                  模拟种子数据
   models.dart                数据模型
   theme.dart                 颜色 / 渐变 / 头像与图片配色
+  services/
+    api_config.dart          mock 开关与后端地址（--dart-define）
+    api_client.dart          Dio 封装：超时 / Token / 日志 / 异常转换
+    api_exception.dart       统一网络异常与中文提示
+    feed_repository.dart     广场动态 repository（mock / 远端示例）
+    services.dart            服务入口，按配置选择 mock 或远端实现
   screens/
     root_shell.dart          四 Tab 主框架
     planet_screen.dart       星球首页
@@ -70,6 +84,6 @@ lib/
 
 ## 说明
 
-- 无第三方运行时依赖，星空、光晕、星球、Tab 图标均为 `CustomPainter` 自绘。
+- 已引入 `dio` 作为网络层基础，默认走本地 mock、不发起真实请求；星空、光晕、星球、Tab 图标仍为 `CustomPainter` 自绘。
 - 所有文案、配色、模拟数据与 `soul-prototype.html` 保持一致。
-- 仅用于交互原型演示，不含后端、账号体系与真实音视频能力。
+- 当前不含真实后端与账号体系；接入方式与示例代码见 `lib/services/`。
